@@ -1,0 +1,49 @@
+### https://raw.github.com/github/gitignore/7b684c28663c20a287d67b2879db83957391c23b/Node.gitignore
+
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+build
+
+node_modules
+
+
+### https://raw.github.com/github/gitignore/7b684c28663c20a287d67b2879db83957391c23b/Global/OSX.gitignore
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must ends with two \r.
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+
+### https://raw.github.com/github/gitignore/7b684c28663c20a287d67b2879db83957391c23b/CodeIgniter.gitignore
+
+*/config/development
+*/logs/log-*.php
+*/logs/!index.html
+*/cache/*
+*/cache/!index.html
+*/cache/!.htaccess
+
+
+### Project Specific
+.env

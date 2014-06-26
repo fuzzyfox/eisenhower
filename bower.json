@@ -1,0 +1,29 @@
+{
+  "name": "eisenhower",
+  "version": "0.0.1",
+  "homepage": "https://github.com/fuzzyfox/eisenhower",
+  "authors": [
+    "William Duyck <fuzzyfox0@gmail.com>"
+  ],
+  "description": "A little tool to create my variation on the Eisenhower Decision Matrix",
+  "keywords": [
+    "eisenhower",
+    "decision",
+    "matrix"
+  ],
+  "license": "MPL-2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.1",
+    "font-awesome": "~4.1.0",
+    "paper": "~0.9.18",
+    "punycode": "~1.2.4"
+  }
+}

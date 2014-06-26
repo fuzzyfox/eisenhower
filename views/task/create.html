@@ -1,0 +1,93 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <form action="/api/task/new" method="POST" class="form">
+    <div class="row">
+      <fieldset class="col-sm-6">
+        <legend>Task Details</legend>
+        <!-- Task Name-->
+        <div class="form-group">
+          <label class="control-label" for="name">Name</label>
+          <input id="name" name="name" placeholder="unnamed task" class="form-control input-md" type="text">
+          <p class="help-block">Short but sweet name for your task</p>
+        </div>
+
+        <!-- Task Notes -->
+        <div class="form-group">
+          <label class="control-label" for="notes">Notes</label>
+          <textarea class="form-control" id="notes" name="notes"></textarea>
+          <p class="help-block">Markdown Accepted</p>
+        </div>
+
+        <!-- External Task Tracking -->
+        <div class="form-group">
+          <label class="control-label" for="url">URL</label>
+          <input id="url" name="url" placeholder="http://example.com/" class="form-control input-md" type="text">
+          <p class="help-block">Add a link to any external tracking for this task </p>
+        </div>
+      </fieldset>
+      <fieldset class="col-sm-6">
+        <legend>Task State</legend>
+        <!-- Task Icon -->
+        <div class="form-group">
+          <label class="control-label" for="icon">Icon</label>
+          <div class="input-group">
+            <input id="icon" name="icon" class="form-control" placeholder="square-o" type="text">
+            <span class="input-group-addon"><i id="icon-preview" class="fa fa-square-o"></i></span>
+          </div>
+          <p class="help-block">Enter the name of any Font Awesome icon.</p>
+        </div>
+
+        <label>Coordinates</label>
+        <section class="row">
+          <!-- Task Importance -->
+          <div class="form-group col-sm-6">
+            <div class="input-group">
+              <span class="input-group-addon">x</span>
+              <input id="coordX" name="coordX" class="form-control" placeholder="0" type="text">
+            </div>
+            <p class="help-block">Magical UI later</p>
+          </div>
+          <!-- Task Urgency -->
+          <div class="form-group col-sm-6">
+            <div class="input-group">
+              <span class="input-group-addon">y</span>
+              <input id="coordY" name="coordY" class="form-control" placeholder="0" type="text">
+            </div>
+            <p class="help-block">Magical UI later</p>
+          </div>
+        </section>
+
+        <!-- Task State -->
+        <div class="form-group">
+          <label class="control-label" for="state">State</label>
+          <select id="state" name="state" class="form-control">
+            <option value="pending" selected>pending</option>
+            <option value="complete">complete</option>
+            <option value="incomplete">incomplete</option>
+            <option value="abandoned">abandoned</option>
+            <option value="ongoing">ongoing</option>
+          </select>
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Button -->
+    <div class="form-group">
+      <button id="submit" name="submit" class="btn btn-primary">Create Task</button>
+    </div>
+  </form>
+</main>
+{% endblock %}
+
+{% block custom_scripts %}
+<script>
+  $(function() {
+    $( '#icon' ).on( 'keyup', function() {
+      var iconName = $( this ).val() || 'square-o';
+      $( '#icon-preview' ).attr( 'class', 'fa fa-' + iconName );
+    });
+  });
+</script>
+{% endblock %}

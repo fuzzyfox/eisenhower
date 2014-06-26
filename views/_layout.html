@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/asset/css/eisenhower.css">
+  {% block custom_styles %}
+  {% endblock %}
+	<title>{{ title }}</title>
+</head>
+<body>
+	{% block header %}
+	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a href="./" class="navbar-brand">Eisenhower</a>
+			</div>
+			<ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="#" class="persona-logout"><span class="fa fa-lock"></span> logout</a>
+        </li>
+				<li>
+          <a href="https://github.com/fuzzyfox/eisenhower">
+            <span class="fa fa-github"></span> fuzzyfox/eisenhower
+          </a>
+        </li>
+			</ul>
+		</div>
+	</nav>
+	{% endblock %}
+
+	{% block main %}
+	<!-- main content here -->
+	{% endblock %}
+
+	{% block footer %}
+	<footer>
+		<div class="container">
+			<div class="row">
+				<section class="col-sm-6">
+					<p>Portions of this content are © 2014 by individual contributors. Content available under a <a href="//creativecommons.org/licenses/by-sa/3.0/" rel="license">Creative Commons license</a>.</p>
+				</section>
+				<section class="col-sm-3">
+					{% block footer_social %}
+					<!-- social links here -->
+					{% endblock %}
+				</section>
+				<section class="col-sm-3">
+					{% block footer_links %}
+					<!-- footer links here -->
+					{% endblock %}
+				</section>
+			</div>
+		</div>
+	</footer>
+	{% endblock %}
+
+  <script src="/vendor/jquery/dist/jquery.min.js"></script>
+  <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="https://login.persona.org/include.js"></script>
+  <script>
+    // login button? when clicked try login
+    var personaLoginBtns = Array.prototype.slice.call( document.querySelectorAll('.persona-login') );
+    personaLoginBtns.filter( function( btn ) {
+      btn.addEventListener( 'click', function() {
+        navigator.id.request();
+      }, false);
+    });
+
+    // logout button? set to display current user + on click logout.
+    var personaLogoutBtns = Array.prototype.slice.call( document.querySelectorAll('.persona-logout') );
+    personaLogoutBtns.filter( function( btn ) {
+      btn.addEventListener( 'click', function() {
+        navigator.id.logout();
+      }, false);
+    });
+
+    navigator.id.watch({
+      onlogin: function(assertion) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/persona/verify", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.addEventListener("loadend", function(e) {
+          var data = JSON.parse(this.responseText);
+          if (data && data.status === "okay") {
+            console.log("You have been logged in as: " + data.email);
+
+            if( '{{ redirect }}' !== '' ) {
+              location.href = '{{ redirect }}';
+              return;
+            }
+
+            if( location.pathname === '/login') {
+              location.href = '/';
+            }
+          }
+        }, false);
+
+        xhr.send(JSON.stringify({
+          assertion: assertion
+        }));
+      },
+      onlogout: function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/persona/logout", true);
+        xhr.addEventListener("loadend", function(e) {
+          console.log("You have been logged out");
+
+          personaLogoutBtns.filter( function( btn ) {
+            btn.parentNode.remove( btn );
+          });
+        });
+        xhr.send();
+      }
+    });
+  </script>
+
+  {% block custom_scripts %}
+  {% endblock %}
+</body>
+</html>
