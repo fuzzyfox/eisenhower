@@ -48,3 +48,4 @@ Icon
 ### Project Specific
 .env
 public/vendor
+public/asset/css
