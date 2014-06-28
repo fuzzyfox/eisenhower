@@ -76,13 +76,12 @@ module.exports = {
     });
 	},
 	list: function( req, res ) {
-    db.User.find( {
+    db.Task.findAll( {
       where: {
-        email: req.session.email
+        UserId: req.session.user.id
       },
-      include: [ db.Task ]
-    }).success( function( user ) {
-      var tasks = user.tasks.filter( function( task ) {
+    }).success( function( tasks ) {
+      tasks = tasks.filter( function( task ) {
         return !task.isDeleted;
       });
 

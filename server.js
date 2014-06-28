@@ -110,6 +110,20 @@ app.get( '/api/task/:id', routes.api.task.getById );
 app.post( '/api/task/update/:id', routes.api.task.update );
 app.get( '/api/task/delete/:id', routes.api.task.remove );
 
+// ui routes for topics
+app.get( '/topics', routes.topic.list );
+app.get( '/topic/new', routes.topic.create );
+app.get( '/topic/:id', routes.topic.getById );
+app.get( '/topic/update/:id', routes.topic.update );
+
+// api routes for topics
+app.get( '/api/topics', routes.api.topic.list );
+app.post( '/api/topic/new', routes.api.topic.create );
+app.get( '/api/topic/:id', routes.api.topic.getById );
+app.get( '/api/topic/:TopicId/take/:TaskId', routes.api.topic.take );
+app.post( '/api/topic/update/:id', routes.api.topic.update );
+app.get( '/api/topic/delete/:id', routes.api.topic.remove );
+
 // api routes for user
 app.get( '/api/user', function( req, res ) {
   res.jsonp( req.session.user );

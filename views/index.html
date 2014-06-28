@@ -3,7 +3,192 @@
 {% block main %}
 <main class="container">
 	<header class="jumbotron">
-		<h1>Hello World</h1>
+		<div class="row">
+      <div class="col-sm-6" id="intro">
+        <div style="display:flex;align-items: center;justify-content: center;height: 100%;">
+          <div style="align-self: flex-start;"></div>
+          <div>
+            <h1>Eisenhower</h1>
+
+            <blockquote>
+              <p>What is important is seldom urgent and what is urgent is seldom important.</p>
+              <cite>– Dwight D. Eisenhower</cite>
+            </blockquote>
+
+            <p class="lead"><strong>Coming Soon.</strong> Till it does arrive, have some fun with that graph.</p>
+          </div>
+          <div style="align-self: flex-end;"></div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <canvas id="task-graph" width="1000" height="1000" class="img-responsive"></canvas>
+      </div>
+    </div>
 	</header>
 </main>
+{% endblock %}
+
+{% block custom_scripts %}
+<script src="/vendor/punycode/punycode.min.js"></script>
+<script src="/asset/strutil/strutil.js"></script>
+<script src="/asset/strutil/sjis_map.js"></script>
+<script src="/asset/strutil/iso88591_map.js"></script>
+<script src='/asset/js/font-awesome-mappings.js'></script>
+<script src="/vendor/paper/dist/paper-full.min.js"></script>
+<script src="/asset/js/task-graph.js"></script>
+
+<script src="/vendor/konami/konami.js"></script>
+
+<script>
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  var cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
+  function pickRandomProperty(obj) {
+    var result;
+    var count = 0;
+    for (var prop in obj) {
+      if (Math.random() < 1/++count) {
+        result = prop;
+      }
+    }
+    return result;
+  }
+
+  var tasks = [];
+  var randomRemove = true;
+  $.subscribe( 'task:added', function( event, task ) {
+    if( tasks.length > 7 && Math.random() > 0.33 && randomRemove ) {
+      var idx = Math.floor( Math.random() * ( tasks.length - 1 ) );
+      var tmp = tasks[ idx ];
+      console.log( 'remove', tmp );
+      tasks.splice( idx, 1 );
+
+      $.publish( 'task:remove', [ tmp ] );
+    }
+
+    tasks.push( task._name );
+
+    var icon = faMap[ pickRandomProperty( faMap ) ];
+    $.publish( 'task:preset', [ undefined, undefined, icon.char ] );
+  });
+
+  function splat() {
+    tasks = [];
+    $.publish( 'tasks:clear' );
+
+    var steps = 0;
+    console.log('splat');
+    function step() {
+      var x = Math.floor( Math.random() * 70 );
+      var y = Math.floor( Math.random() * 70 );
+
+      if( Math.random() > 0.5 ) {
+        x = -1 * x;
+      }
+      if( Math.random() > 0.5 ) {
+        y = -1 * y;
+      }
+
+      $.publish( 'task:add', { x: x, y: y } );
+
+      if( steps < 14 ) {
+        steps += 1;
+        setTimeout( function() {
+          requestAnimationFrame(step);
+        }, 200 );
+      }
+    }
+    requestAnimationFrame(step);
+
+    randomRemove = true;
+  }
+
+  function spiral() {
+    $.publish( 'tasks:clear' );
+    randomRemove = false;
+
+
+    var t = 0;
+    function step() {
+      var x = Math.pow( Math.E, 0.2 * t ) * Math.cos( t );
+      var y = Math.pow( Math.E, 0.2 * t ) * Math.sin( t );
+
+      $.publish( 'task:add', { x: x, y: y } );
+
+      t += 0.1;
+
+      if( t < 25 ) {
+        requestAnimationFrame(step);
+      }
+      else {
+        setTimeout( splat, 1500 );
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  function drawHeart() {
+    console.log('love');
+    function calcY( x ) {
+      var y1 = 0.5 * ( Math.sqrt( Math.abs( x ) ) - ( Math.sqrt( 2 ) * Math.sqrt( 1 - ( x * x ) ) ) );
+      var y2 = 0.5 * ( Math.sqrt( Math.abs( x ) ) + ( Math.sqrt( 2 ) * Math.sqrt( 1 - ( x * x ) ) ) );
+      return [ y1, y2 ];
+    }
+
+    randomRemove = false;
+
+    var x = 0;
+
+    var loop;
+
+    function step(){
+      if( x >= 1 ) {
+        x = -1;
+      }
+      var y = calcY( x );
+
+      y.forEach( function( y ) {
+        $.publish( 'task:add', [ { x: x*50, y: y*50 }, undefined, 'red', 'red' ] );
+      });
+
+      x += 0.02;
+      if( x >= 0.01 || -0.01 >= x  ) {
+        loop = requestAnimationFrame( step );
+      }
+      else {
+        $.publish( 'task:add', [ { x: 50, y: 25 }, undefined, 'red', 'red' ] );
+        setTimeout( function(){
+          splat();
+        }, 1500 )
+      }
+    }
+    $.publish( 'tasks:clear' );
+    loop = requestAnimationFrame( step );
+  }
+
+  __konami__.enable(function(){
+    var rand = Math.random();
+    if( rand  < 0.33 ) {
+      console.log( 'konami heart' );
+      drawHeart();
+    }
+    else if( rand  < 0.66 ) {
+      console.log( 'konami spiral');
+      spiral();
+    }
+    else {
+      console.log( 'konami splat' );
+      splat();
+    }
+  }, { replay: true });
+
+  splat();
+
+  $( '#intro' ).height( $( '#task-graph' ).height() );
+  $( window ).on( 'resize', function() {
+    $( '#intro' ).height( $( '#task-graph' ).height() );
+  });
+</script>
 {% endblock %}

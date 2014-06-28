@@ -77,6 +77,7 @@ var axisLayer = new Layer();
  */
 var Axis = new function() {
   var color = '#444';
+  var padding = ( ( ( width / 2 ) / 100 ) * 10 );
 
   var arrowHead = function( pos, rotate ) {
     var path = new Path( [pos[0], pos[1] - 1], [pos[0] + 6, pos[1] + 12], [pos[0], pos[1] + 12], [pos[0] - 6, pos[1] + 12], [pos[0], pos[1] - 1] );
@@ -90,24 +91,24 @@ var Axis = new function() {
 
   var x = {
     path: new Path(),
-    start: new Point( 20, (height / 2) ),
-    head: arrowHead( [(width / 2), 20] )
+    start: new Point( padding, (height / 2) ),
+    head: arrowHead( [(width / 2), padding] )
   };
   var y = {
     path: new Path(),
-    start: new Point( (width / 2), 20 ),
-    head: arrowHead( [width - 26, (height / 2) - 6], 90 )
+    start: new Point( (width / 2), padding ),
+    head: arrowHead( [width - ( padding + 6 ), (height / 2) - 6], 90 )
   };
 
   // draw x axis
   x.path.strokeColor = color;
   x.path.moveTo( x.start );
-  x.path.lineTo( x.start + [ width - 40, 0 ] );
+  x.path.lineTo( x.start + [ width - ( padding * 2 ), 0 ] );
 
   // draw y axis
   y.path.strokeColor = color;
   y.path.moveTo( y.start );
-  y.path.lineTo( y.start + [ 0, height - 40 ] );
+  y.path.lineTo( y.start + [ 0, height - ( padding * 2 ) ] );
 
   return {
     x: x,
@@ -126,28 +127,40 @@ var taskLayer = new Layer();
  */
 var Tasks = new function() {
   var tasks = [];
-  var iconSize = 16;
   var preventAdd = false;
+  var preset = {
+    iconSize: ((width / 2) / 100) * 7,
+    iconChar: '\uf00d',
+    fillColor: undefined,
+    textColor: '#fff'
+  };
 
   return {
     make: function( point, fillColor, textColor, iconChar ) {
       var task = new Group();
+      var strokeColor;
+
+      if( fillColor === 'white' || preset.fillColor === 'white' ) {
+        strokeColor = '#eee';
+      }
+
       var circle = new Path.Circle({
         center: point,
-        radius: iconSize * 0.9,
-        fillColor: fillColor || randomColor(),
+        radius: preset.iconSize * 0.9,
+        fillColor: fillColor || preset.fillColor || randomColor(),
+        strokeColor: strokeColor,
         name: 'circle'
       });
       task.addChild( circle );
 
       var icon = new PointText({
-        point: point + [ 0, (iconSize * 0.33) ],
-        content: iconChar || '\uf00d',
+        point: point + [ 0, (preset.iconSize * 0.33) ],
+        content: iconChar || preset.iconChar,
         justification: 'center',
         characterStyle: {
           fontFamily: 'FontAwesome',
-          fillColor: textColor || '#fff',
-          fontSize: iconSize
+          fillColor: textColor || preset.textColor,
+          fontSize: preset.iconSize
         },
         name: 'icon'
       });
@@ -160,7 +173,7 @@ var Tasks = new function() {
         // create task marker
         var task = this.make( point, fillColor, textColor, iconChar );
         // assign an id
-        task.name = '#' + ref || 'task-' + (new Date()).valueOf();
+        task.name = ref ? '#' + ref : 'task-' + (new Date()).valueOf();
         task.point = point;
 
         /*
@@ -201,8 +214,13 @@ var Tasks = new function() {
       return false;
     },
     forceAdd: function( point, ref, fillColor, textColor, iconChar ) {
+      var tmpPreventAdd = preventAdd;
       preventAdd = false;
+
       var rtn = this.add( point, ref, fillColor, textColor, iconChar );
+
+      preventAdd = tmpPreventAdd;
+
       return rtn;
     },
     remove: function( ref ) {
@@ -238,7 +256,16 @@ var Tasks = new function() {
 
       // update view now we deleted something
       paper.view.update();
-    }
+    },
+    setIcon: function( iconChar ) {
+      preset.iconChar = iconChar || preset.iconChar;
+    },
+    setFillColor: function( fillColor ) {
+      preset.fillColor = fillColor || preset.fillColor;
+    },
+    setTextColor: function( textColor ) {
+      preset.textColor = textColor || preset.textColor;
+    },
   };
 };
 
@@ -267,4 +294,10 @@ $.subscribe( 'task:add', function( event, coords, ref, fillColor, textColor, ico
 
 $.subscribe( 'tasks:clear', function( event, ref ) {
   Tasks.clear();
+});
+
+$.subscribe( 'task:preset', function( event, fillColor, textColor, iconChar ) {
+  Tasks.setFillColor( fillColor );
+  Tasks.setTextColor( textColor );
+  Tasks.setIcon( iconChar );
 });

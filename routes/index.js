@@ -7,7 +7,9 @@ module.exports = {
     newUser: require( './auth/newUser' )
 	},
 	api: {
-		task: require( './api/task' )
+		task: require( './api/task' ),
+    topic: require( './api/topic' )
 	},
-  task: require( './task' )
+  task: require( './task' ),
+  topic: require( './topic' ),
 };

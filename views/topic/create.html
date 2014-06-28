@@ -1,0 +1,32 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <form action="/api/topic/new" method="POST" class="form">
+    <div class="row">
+      <fieldset class="col-sm-12">
+        <legend>New Topic</legend>
+
+        <!-- Task Name-->
+        <div class="form-group">
+          <label class="control-label" for="name">Name</label>
+          <input id="name" name="name" placeholder="unnamed topic" class="form-control input-md" type="text" maxlength="70">
+          <p class="help-block">Short but sweet name for your topic. Max 70 chars.</p>
+        </div>
+
+        <!-- Task Notes -->
+        <div class="form-group">
+          <label class="control-label" for="description">Description</label>
+          <textarea class="form-control" id="description" name="description" maxlength="255"></textarea>
+          <p class="help-block">Markdown Accepted, Max 255 chars.</p>
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+          <button id="submit" name="submit" class="btn btn-primary">Create Topic</button>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</main>
+{% endblock %}

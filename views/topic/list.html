@@ -1,0 +1,50 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <table class="table table-striped preview-list">
+        <thead>
+          <tr>
+            <th></th>
+            <th>id</th>
+            <th>name</th>
+            <th>description</th>
+            <th>graph</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for topic in topics %}
+          <tr>
+            <td><i class="fa fa-{{ topic.icon }}"></i></td>
+            <td>{{ topic.id }}</td>
+            <td><a href="/topic/{{ topic.id }}">{{ topic.name }}</a></td>
+            <td>{{ topic.description | truncate(140) }}</td>
+            <td><img src="" data-task="{{ topic.tasksJSON }}" alt="task graph" rel="task-graph"></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block custom_scripts %}
+<script src="/vendor/punycode/punycode.min.js"></script>
+<script src="/asset/strutil/strutil.js"></script>
+<script src="/asset/strutil/sjis_map.js"></script>
+<script src="/asset/strutil/iso88591_map.js"></script>
+<script src='/asset/js/font-awesome-mappings.js'></script>
+<script src="/vendor/paper/dist/paper-full.min.js"></script>
+<script src="/asset/js/task-graph.js"></script>
+<script>
+  $.subscribe( 'task:add', function() {
+    console.log( 'add', arguments );
+  });
+  $.subscribe( 'task:added', function() {
+    console.log( 'added', arguments );
+  });
+</script>
+{% endblock %}

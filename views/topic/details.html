@@ -1,0 +1,50 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>{{ topic.name }}</h1>
+      <div class="lead">{{ topic.description }}</div>
+      <table class="table table-striped preview-list">
+        <thead>
+          <tr>
+            <th></th>
+            <th>id</th>
+            <th>name</th>
+            <th>notes</th>
+            <th>url</th>
+            <th>graph</th>
+            <th>state</th>
+            <th>last updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for task in topic.tasks %}
+          <tr>
+            <td><i class="fa fa-{{ task.icon }}"></i></td>
+            <td>{{ task.id }}</td>
+            <td><a href="/task/{{ task.id }}">{{ task.name }}</a></td>
+            <td>{{ task.notes | truncate(140) }}</td>
+            <td>{% if task.url %}<a href="{{ task.url }}"><i class="fa fa-external-link"></i> <span class="sr-only">{{ task.url }}</span></a>{% endif %}</td>
+            <td><img src="" data-task="{{ task.taskJSON }}" alt="task graph" rel="task-graph"></td>
+            <td>{{ task.state }}</td>
+            <td>{{ task.updatedAt }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block custom_scripts %}
+<script src="/vendor/punycode/punycode.min.js"></script>
+<script src="/asset/strutil/strutil.js"></script>
+<script src="/asset/strutil/sjis_map.js"></script>
+<script src="/asset/strutil/iso88591_map.js"></script>
+<script src='/asset/js/font-awesome-mappings.js'></script>
+<script src="/vendor/paper/dist/paper-full.min.js"></script>
+<script src="/asset/js/task-graph.js"></script>
+{% endblock %}

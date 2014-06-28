@@ -16,7 +16,7 @@ module.exports = {
   },
   update: function( req, res ) {
     api.getById( req, function( task ) {
-      res.render( 'task/update.html', { title: 'Update Task', task: task } );
+      res.render( 'task/create.html', { title: 'Update Task', task: task } );
     });
   },
   getById: function( req, res ) {
