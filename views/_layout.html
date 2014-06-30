@@ -32,6 +32,16 @@
 	</nav>
 	{% endblock %}
 
+  <section class="notifications container">
+    {% for type, messages in flash %}
+      {% for message in messages %}
+      <div class="alert{{ ' alert-' + type if type }}" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endfor %}
+
+    {% block notifications %}{% endblock %}
+  </section>
+
 	{% block main %}
 	<!-- main content here -->
 	{% endblock %}
@@ -75,6 +85,7 @@
     personaLogoutBtns.filter( function( btn ) {
       btn.addEventListener( 'click', function() {
         navigator.id.logout();
+        location.href = '/login';
       }, false);
     });
 

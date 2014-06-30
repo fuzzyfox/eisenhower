@@ -1,0 +1,46 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <form action="/api/user/new" method="POST" class="form">
+    <div class="row">
+      <fieldset class="col-sm-8 col-sm-offset-2">
+        <legend>New User</legend>
+
+        <div class="row">
+          <!-- First Name-->
+          <div class="form-group col-sm-6">
+            <label class="control-label" for="firstname">First Name</label>
+            <input id="firstname" name="firstname" placeholder="John" class="form-control input-md" type="text" maxlength="35">
+            <p class="help-block">This is completely optional.</p>
+          </div>
+
+          <!-- First Name-->
+          <div class="form-group col-sm-6">
+            <label class="control-label" for="lastname">Last Name</label>
+            <input id="lastname" name="lastname" placeholder="Smith" class="form-control input-md" type="text" maxlength="35">
+            <p class="help-block">This is completely optional.</p>
+          </div>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="form-group">
+          <label for="sendEngagements">Privacy Settings</label>
+          <div class="checkbox">
+            <label for="sendEngagements">
+              <input name="sendEngagements" id="sendEngagements" value="true" type="checkbox">
+              Send me news + updates to Eisenhower.
+            </label>
+          </div>
+        </div>
+
+        <!-- For Controls -->
+        <div class="form-group">
+          <button id="submit" name="submit" type="submit" class="btn btn-success">Get Started</button>
+          <button id="reset" name="reset" type="reset" class="btn btn-danger">Maybe not</button>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</main>
+{% endblock %}

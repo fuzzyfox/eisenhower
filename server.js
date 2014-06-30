@@ -27,7 +27,7 @@ Habitat.load();
 var app = express();
 app.use( express.static( __dirname + '/public' ) );
 app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded() );
+app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use( cookieParser() );
 app.use( session( { secret: env.get( 'session_secret' ) } ) );
 app.use( flash() );
@@ -51,11 +51,17 @@ app.get( '/healthcheck', function( req, res ) {
 
 // landing pages
 app.get( '/', function( req, res ) {
-	res.render( 'index.html', { title: 'Home' } );
+	res.render( 'index.html', {
+    title: 'Home',
+    flash: req.flash()
+  });
 });
 
 app.get( '/paper-test', function( req, res ) {
-  res.render( 'paper-test.html', { title: 'Paper Test' } );
+  res.render( 'paper-test.html', {
+    title: 'Paper Test',
+    flash: req.flash()
+  });
 });
 
 // auth barrier
@@ -85,7 +91,15 @@ else {
 }
 
 // enforce login from here on
-app.all( '*', routes.auth.enforce, routes.auth.newUser );
+app.all([
+  '/api/*',
+  '/user',
+  '/user/*',
+  '/topics',
+  '/topic/*',
+  '/task*',
+  '/task/*',
+], routes.auth.enforce, routes.auth.newUser );
 
 // no cache on api routes
 app.all( '/api/*', function( req, res, next ) {
@@ -96,6 +110,10 @@ app.all( '/api/*', function( req, res, next ) {
 	});
 	return next();
 });
+
+/*
+  Tasks
+ */
 
 // ui routes for tasks
 app.get( '/tasks', routes.task.list );
@@ -109,6 +127,10 @@ app.post( '/api/task/new', routes.api.task.create );
 app.get( '/api/task/:id', routes.api.task.getById );
 app.post( '/api/task/update/:id', routes.api.task.update );
 app.get( '/api/task/delete/:id', routes.api.task.remove );
+
+/*
+  Topics
+ */
 
 // ui routes for topics
 app.get( '/topics', routes.topic.list );
@@ -124,16 +146,42 @@ app.get( '/api/topic/:TopicId/take/:TaskId', routes.api.topic.take );
 app.post( '/api/topic/update/:id', routes.api.topic.update );
 app.get( '/api/topic/delete/:id', routes.api.topic.remove );
 
-// api routes for user
-app.get( '/api/user', function( req, res ) {
-  res.jsonp( req.session.user );
+/*
+  Users
+ */
+
+// ui routes for users
+app.get( '/user/new', routes.user.create );
+app.get( '/user/:id?', function( req, res ) {
+  if( !req.params.id ) {
+    req.params.id = req.session.user.id;
+  }
+  routes.user.details( req, res );
 });
 
+// api routes for users
+app.get( '/api/user/:id?', function( req, res ) {
+  if( !req.params.id ) {
+    req.params.id = req.session.user.id;
+  }
+
+  routes.api.user.details( req, res );
+});
+app.post( '/api/user/new', routes.api.user.create );
+
 // not found
-app.all( '*', function( req, res, next ) {
+app.get( '*', function( req, res ) {
+  res.status(404).render( 'error.html', {
+    errors: [{
+      message: 'Page not found',
+      code: 404
+    }]
+  });
+});
+app.post( '*', function( req, res ) {
   res.status( 404 ).jsonp({
     errors: [{
-      message: '404 not found',
+      message: 'Page not found',
       code: 404
     }]
   });

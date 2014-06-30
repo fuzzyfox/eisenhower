@@ -60,16 +60,23 @@ module.exports = {
           state: req.body.state
         }).success( function() {
           if( typeof res === 'function' ){
-            return res( task );
+            return res( null, task );
           }
 
           return res.jsonp( task );
         });
       }
 
+      if( typeof res === 'function' ){
+        return res( [{
+          message: 'Task not found',
+          code: 404
+        }], task );
+      }
+
       return res.status( 404 ).jsonp({
         errors: [{
-          message: '404 not found',
+          message: 'Task not found',
           code: 404
         }]
       });
@@ -99,11 +106,27 @@ module.exports = {
         UserId: req.session.user.id
       }
     }).success( function( task ) {
-      if( typeof res === 'function' ){
-        return res( task );
+      if( task ) {
+        if( typeof res === 'function' ){
+          return res( null, task );
+        }
+
+        return res.jsonp( task );
       }
 
-      res.jsonp( task );
+      if( typeof res === 'function' ){
+        return res( [{
+          message: 'Task not found',
+          code: 404
+        }], task );
+      }
+
+      res.status( 404 ).jsonp({
+        errors:  [{
+          message: 'Task not found',
+          code: 404
+        }]
+      });
     });
 	}
 };

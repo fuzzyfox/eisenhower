@@ -77,10 +77,11 @@ var axisLayer = new Layer();
  */
 var Axis = new function() {
   var color = '#444';
-  var padding = ( ( ( width / 2 ) / 100 ) * 10 );
+  var step = (width / 2) / 100;
+  var padding = ( step * 10 );
 
   var arrowHead = function( pos, rotate ) {
-    var path = new Path( [pos[0], pos[1] - 1], [pos[0] + 6, pos[1] + 12], [pos[0], pos[1] + 12], [pos[0] - 6, pos[1] + 12], [pos[0], pos[1] - 1] );
+    var path = new Path( [pos[0], pos[1] - step], [pos[0] + (2 * step), pos[1] + (4 * step)], [pos[0], pos[1] + (4 * step)], [pos[0] - (2 * step), pos[1] + (4 * step)], [pos[0], pos[1] - step] );
     path.closed = true;
     path.simplify(2.5);
     path.fillColor = color;
@@ -97,7 +98,7 @@ var Axis = new function() {
   var y = {
     path: new Path(),
     start: new Point( (width / 2), padding ),
-    head: arrowHead( [width - ( padding + 6 ), (height / 2) - 6], 90 )
+    head: arrowHead( [width - ( padding + (2 * step) ), (height / 2) - (2 * step)], 90 )
   };
 
   // draw x axis

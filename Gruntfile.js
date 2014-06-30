@@ -66,7 +66,7 @@ module.exports = function( grunt ) {
       ],
       tasks: [ 'jshint', 'stylus', 'express:dev' ],
       express: {
-        files: [ '*.js', '*/**.js' ],
+        files: [ '*.js', 'models/*.js', 'routes/*.js', 'routes/*/*.js' ],
         tasks:  [ 'express:dev' ],
         options: {
           spawn: false

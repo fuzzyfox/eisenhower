@@ -61,16 +61,23 @@ module.exports = {
           isActive: req.body.isActive || true
         }).success( function() {
           if( typeof res === 'function' ){
-            return res( topic );
+            return res( null, topic );
           }
 
           return res.jsonp( topic );
         });
       }
 
+      if( typeof res === 'function' ){
+        return res( [{
+          message: 'Topic not found',
+          code: 404
+        }], topic );
+      }
+
       return res.status( 404 ).jsonp({
         errors: [{
-          message: '404 not found',
+          message: 'Topic not found',
           code: 404
         }]
       });
@@ -93,19 +100,8 @@ module.exports = {
           UserId: req.session.user.id
         }
       }).success( function( specialTasks ) {
-        if( specialTasks.length > 0 ) {
-          var special = db.Topic.build({
-            id: 0,
-            name: 'Catch-All',
-            description: 'This is a special topic to catch all tasks not accociated to a topic.'
-          });
-          special.tasks = specialTasks;
-
-          topics = [special].concat( topics );
-        }
-
         if( typeof res === 'function' ){
-          return res( topics );
+          return res( null, topics );
         }
 
         res.jsonp( topics );
@@ -113,28 +109,6 @@ module.exports = {
     });
   },
   getById: function( req, res ) {
-    if( req.params.id == 0 ) {
-      return db.Task.findAll( {
-        where: {
-          TopicId: null,
-          UserId: req.session.user.id
-        }
-      }).success( function( specialTasks ) {
-        var special = db.Topic.build({
-          id: 0,
-          name: 'Catch-All',
-          description: 'This is a special topic to catch all tasks not accociated to a topic.'
-        });
-        special.tasks = specialTasks;
-
-        if( typeof res === 'function' ){
-          return res( special );
-        }
-
-        res.jsonp( special );
-      });
-    }
-
     db.Topic.find( {
       where: {
         id: req.params.id,
@@ -144,15 +118,22 @@ module.exports = {
     }).success( function( topic ) {
       if( topic ) {
         if( typeof res === 'function' ){
-          return res( topic );
+          return res( null, topic );
         }
 
         return res.jsonp( topic );
       }
 
+      if( typeof res === 'function' ){
+        return res( [{
+          message: 'Topic not found',
+          code: 404
+        }], topic );
+      }
+
       return res.status( 404 ).jsonp({
         errors: [{
-          message: '404 not found',
+          message: 'Topic not found',
           code: 404
         }]
       });
@@ -178,25 +159,39 @@ module.exports = {
               topic.tasks.push( task );
 
               if( typeof res === 'function' ){
-                return res( topic );
+                return res( null, topic );
               }
 
               return res.jsonp( topic );
             });
           }
 
+          if( typeof res === 'function' ){
+            return res( [{
+              message: 'Task not found',
+              code: 404
+            }], topic );
+          }
+
           return res.status( 404 ).jsonp({
             errors: [{
-              message: '404 Task not found',
+              message: 'Task not found',
               code: 404
             }]
           });
         });
       }
 
+      if( typeof res === 'function' ){
+        return res( [{
+          message: 'Topic not found',
+          code: 404
+        }], topic );
+      }
+
       return res.status( 404 ).jsonp({
         errors: [{
-          message: '404 Topic not found',
+          message: 'Topic not found',
           code: 404
         }]
       });

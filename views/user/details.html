@@ -1,0 +1,29 @@
+{% extends '_layout.html' %}
+
+{% block main %}
+<main class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <section class="row">
+        <div class="col-sm-2">
+          <img src="https://secure.gravatar.com/avatar/{{ user.emailHash }}?s=200" alt="user avatar" class="img-responsive">
+        </div>
+        <div class="col-sm-10">
+          <dl>
+            <dt>First Name</dt>
+            <dd>{{ user.firstname }}</dd>
+            <dt>Last Name</dt>
+            <dd>{{ user.lastname }}</dd>
+            <dt>Email</dt>
+            <dd>{{ user.email }}</dd>
+            <dt># Topics</dt>
+            <dd>{{ user.topics.length }}</dd>
+            <dt># Tasks</dt>
+            <dd>{{ user.tasks.length }}</dd>
+          </dl>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+{% endblock %}
