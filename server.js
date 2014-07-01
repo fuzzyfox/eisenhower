@@ -8,6 +8,7 @@ var flash = require( 'connect-flash' );
 var morgan = require( 'morgan' );
 var Habitat = require( 'habitat' );
 var nunjucks = require( 'nunjucks' );
+var marked = require( 'marked' );
 var routes = require( './routes' );
 var db = require( './models' );
 
@@ -36,10 +37,17 @@ if( env.get( 'debug' ) ) {
 }
 
 // setup nunjucks
-nunjucks.configure( 'views', {
-	autoescape: true,
-	express: app
+var nunjucksEnv = nunjucks.configure( 'views', {
+  autoescape: true
 });
+
+// add nunjucks marked filter
+nunjucksEnv.addFilter( 'marked', function( str ) {
+  return marked( str );
+});
+
+// add nunjucks to res.render
+nunjucksEnv.express( app );
 
 // healthcheck
 app.get( '/healthcheck', function( req, res ) {

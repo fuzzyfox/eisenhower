@@ -104,7 +104,8 @@ module.exports = {
       where: {
         id: req.params.id,
         UserId: req.session.user.id
-      }
+      },
+      include: [ db.Topic ]
     }).success( function( task ) {
       if( task ) {
         if( typeof res === 'function' ){

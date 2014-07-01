@@ -18,6 +18,10 @@ module.exports = {
   create: function( req, res ) {
     res.render( 'task/create.html', {
       title: 'New Task',
+      task: {
+        coordX: req.query.coordX || undefined,
+        coordY: req.query.coordY || undefined,
+      },
       flash: req.flash()
     });
   },

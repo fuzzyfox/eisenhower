@@ -19,8 +19,8 @@
         </thead>
         <tbody>
           {% for task in tasks %}
-          <tr>
-            <td><i class="fa fa-{{ task.icon }}"></i></td>
+          <tr class="task task-{{ task.state }}">
+            <td><i class="fa fa-{{ task.icon }} task-icon"></i></td>
             <td>{{ task.id }}</td>
             <td><a href="/task/{{ task.id }}">{{ task.name }}</a></td>
             <td>{{ task.notes | truncate(140) }}</td>

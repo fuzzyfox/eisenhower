@@ -1,3 +1,14 @@
+$pendingTaskBg = #fff;
+$pendingTaskText = #444;
+$completeTaskBg = #6ecba9;
+$completeTaskText = #fff;
+$incompleteTaskBg = #ffcd36;
+$incompleteTaskText = #fff;
+$abandonedTaskBg = #fe4040;
+$abandonedTaskText = #fff;
+$ongoingTaskBg = #63cfea;
+$ongoingTaskText = #fff;
+
 img[rel=task-graph] {
   background: url(/asset/img/loading.gif) center no-repeat;
 }
@@ -6,6 +17,12 @@ table.preview-list {
   img[rel=task-graph] {
     max-width: 128px;
     max-height: 128px;
+  }
+
+  .task-complete {
+    img[rel=task-graph] {
+      display: none;
+    }
   }
 }
 
@@ -32,4 +49,37 @@ table.preview-list {
   font-family: 'FontAwesome';
   padding-right: 0.5em;
   font-size: 1.2em;
+}
+
+.task {
+  .fa.task-icon,
+  .fa.task-icon::before {
+    border-radius: 100%;
+    padding: 0.4em;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+  }
+
+  &.task-pending .fa.task-icon::before {
+    background: $pendingTaskBg;
+    color: $pendingTaskText;
+    border: 1px solid #eee;
+  }
+  &.task-complete .fa.task-icon::before {
+    background: $completeTaskBg;
+    color: $completeTaskText;
+  }
+  &.task-incomplete .fa.task-icon::before {
+    background: $incompleteTaskBg;
+    color: $incompleteTaskText;
+  }
+  &.task-abandoned .fa.task-icon::before {
+    background: $abandonedTaskBg;
+    color: $abandonedTaskText;
+  }
+  &.task-ongoing .fa.task-icon::before {
+    background: $ongoingTaskBg;
+    color: $ongoingTaskText;
+  }
 }

@@ -51,53 +51,74 @@ $(function(){
    */
 
   // wait for the mapping to complete
-  $( window ).on( 'famap:ready', function() {
-    setTimeout( function(){
-      $( 'img[rel=task-graph]' ).each( function( idx ) {
-        function generateGraph( task, imgElem ) {
-          // actually plot things
-          function plot( coords, ref, stateColors, iconChar ) {
-            $.publish( 'task:add', [ coords, ref, stateColors.fillColor, stateColors.textColor, iconChar.char ] );
-          }
+  function runGraphGenerator(){
+    $( 'img[rel=task-graph]' ).each( function( idx ) {
+      function generateGraph( task, imgElem ) {
+        // actually plot things
+        function plot( coords, ref, stateColors, iconChar ) {
+          $.publish( 'task:add', [ coords, ref, stateColors.fillColor, stateColors.textColor, iconChar.char ] );
+        }
 
-          // plot multiple points
-          if( Array.isArray( task ) ) {
-            console.log( 'multiple' );
-            task.forEach( function( singleTask ) {
-              plot( {
-                x: singleTask.coordX,
-                y: singleTask.coordY
-              }, singleTask.id, stateColorMap[ singleTask.state ], faMap[ singleTask.icon ] );
-            });
-          }
-          // plot single task
-          else {
-            console.log( 'single' );
+        // plot multiple points
+        if( Array.isArray( task ) ) {
+          console.log( 'multiple' );
+          task.forEach( function( singleTask ) {
             plot( {
-              x: task.coordX,
-              y: task.coordY
-            }, task.id, stateColorMap[ task.state ], faMap[ task.icon ] );
-          }
-
-          $( imgElem ).css( 'background-image', 'none' );
-          $( imgElem ).attr( 'src', $( '#task-graph' ).get()[0].toDataURL( 'image/png' ) );
-          $.publish( 'tasks:clear' );
+              x: singleTask.coordX,
+              y: singleTask.coordY
+            }, singleTask.id, stateColorMap[ singleTask.state ], faMap[ singleTask.icon ] );
+          });
+        }
+        // plot single task
+        else {
+          console.log( 'single' );
+          plot( {
+            x: task.coordX,
+            y: task.coordY
+          }, task.id, stateColorMap[ task.state ], faMap[ task.icon ] );
         }
 
-        /*
-          Get task(s)
-         */
-        var task = $( this ).data( 'task' );
+        $( imgElem ).css( 'background-image', 'none' );
+        $( imgElem ).attr( 'src', $( '#task-graph' ).get()[0].toDataURL( 'image/png' ) );
+        $.publish( 'tasks:clear' );
+      }
 
-        // we must have a task to plot
-        if( !task ) {
-          return;
-        }
+      /*
+        Get task(s)
+       */
+      var task = $( this ).data( 'task' );
 
-        // calc delay for this canvas task
-        var imgElem = this;
-        generateGraph( task,  imgElem );
-      });
-    }, 1000 );
+      // we must have a task to plot
+      if( !task ) {
+        return;
+      }
+
+      // calc delay for this canvas task
+      var imgElem = this;
+      generateGraph( task,  imgElem );
+    });
+  }
+
+  /*
+    Wait for both faMap + paper to be ready
+   */
+
+  var faMapOrPaperReady = false;
+  $( window ).on( 'famap:ready', function() {
+    if( ! faMapOrPaperReady ) {
+      faMapOrPaperReady = true;
+      return;
+    }
+
+    runGraphGenerator();
+  });
+
+  $.subscribe( 'paper:ready', function() {
+    if( ! faMapOrPaperReady ) {
+      faMapOrPaperReady = true;
+      return;
+    }
+
+    runGraphGenerator();
   });
 });

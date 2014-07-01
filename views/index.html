@@ -61,7 +61,6 @@
     if( tasks.length > 7 && Math.random() > 0.33 && randomRemove ) {
       var idx = Math.floor( Math.random() * ( tasks.length - 1 ) );
       var tmp = tasks[ idx ];
-      console.log( 'remove', tmp );
       tasks.splice( idx, 1 );
 
       $.publish( 'task:remove', [ tmp ] );
@@ -78,7 +77,6 @@
     $.publish( 'tasks:clear' );
 
     var steps = 0;
-    console.log('splat');
     function step() {
       var x = Math.floor( Math.random() * 70 );
       var y = Math.floor( Math.random() * 70 );
@@ -130,7 +128,6 @@
   }
 
   function drawHeart() {
-    console.log('love');
     function calcY( x ) {
       var y1 = 0.5 * ( Math.sqrt( Math.abs( x ) ) - ( Math.sqrt( 2 ) * Math.sqrt( 1 - ( x * x ) ) ) );
       var y2 = 0.5 * ( Math.sqrt( Math.abs( x ) ) + ( Math.sqrt( 2 ) * Math.sqrt( 1 - ( x * x ) ) ) );

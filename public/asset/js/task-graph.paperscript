@@ -246,13 +246,7 @@ var Tasks = new function() {
     clear: function() {
       for( var i = 0; i < tasks.length; i++ ) {
         // remove from store
-        var task = tasks[ i ];
-        tasks.splice( i, 0 );
-
-        // remove from paper
-        task.remove();
-
-        $.publish( 'task:removed', [ task ] );
+        this.remove( tasks[ i ].name );
       }
 
       // update view now we deleted something
@@ -302,3 +296,9 @@ $.subscribe( 'task:preset', function( event, fillColor, textColor, iconChar ) {
   Tasks.setTextColor( textColor );
   Tasks.setIcon( iconChar );
 });
+
+/* --------------------------------------
+  Publish ready event
+ -------------------------------------- */
+
+$.publish( 'paper:ready' );

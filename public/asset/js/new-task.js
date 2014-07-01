@@ -73,7 +73,7 @@ function _updateGraph() {
   $.publish( 'task:preset', [ fillColor, textColor, icon.char ] );
 }
 var updateGraph = debounce( _updateGraph, 700 );
-setTimeout( _updateGraph, 1000 );
+$.subscribe( 'paper:ready', _updateGraph );
 
 $( '.form' ).on( 'keyup change', updateGraph );
 

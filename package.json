@@ -38,6 +38,7 @@
     "express-session": "^1.5.1",
     "habitat": "^1.1.0",
     "lodash": "^2.4.1",
+    "marked": "^0.3.2",
     "morgan": "^1.1.1",
     "mysql": "^2.3.2",
     "nunjucks": "^1.0.5",

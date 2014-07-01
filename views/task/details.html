@@ -11,18 +11,16 @@
         </div>
         <div class="col-sm-4">
           <dl>
-            <dt>x-coordinate</dt>
-            <dd>{{ task.coordX }}</dd>
-            <dt>y-coordinate</dt>
-            <dd>{{ task.coordY }}</dd>
             <dt>state</dt>
             <dd>{{ task.state }}</dd>
             <dt>link</dt>
-            <dd>{{ task.url }}</dd>
+            <dd><a href="{{ task.url }}">{{ task.url if task.url else 'null' }}</a></dd>
+            <dt>topic</dt>
+            <dd>{{ task.topic.name }}</dd>
           </dl>
         </div>
         <div class="col-sm-6">
-          {{ task.notes }}
+          {{ task.notes | marked | safe }}
         </div>
       </section>
     </div>

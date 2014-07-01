@@ -2,34 +2,31 @@
 
 {% block main %}
 <main class="container">
+  <h1>{{ topic.name }}</h1>
+  <div class="lead">{{ topic.description }}</div>
   <div class="row">
-    <div class="col-sm-12">
-      <h1>{{ topic.name }}</h1>
-      <div class="lead">{{ topic.description }}</div>
+    <div class="col-sm-6">
+      <canvas id="task-graph" width="700" height="700" class="img-responsive"></canvas>
+    </div>
+    <div class="col-sm-6">
       <table class="table table-striped preview-list">
         <thead>
           <tr>
             <th></th>
             <th>id</th>
             <th>name</th>
-            <th>notes</th>
             <th>url</th>
-            <th>graph</th>
             <th>state</th>
-            <th>last updated</th>
           </tr>
         </thead>
         <tbody>
           {% for task in topic.tasks %}
-          <tr>
-            <td><i class="fa fa-{{ task.icon }}"></i></td>
+          <tr class="task task-{{ task.state }}" data-task="{{ task.taskJSON }}">
+            <td><i class="fa fa-{{ task.icon }} task-icon"></i></td>
             <td>{{ task.id }}</td>
             <td><a href="/task/{{ task.id }}">{{ task.name }}</a></td>
-            <td>{{ task.notes | truncate(140) }}</td>
             <td>{% if task.url %}<a href="{{ task.url }}"><i class="fa fa-external-link"></i> <span class="sr-only">{{ task.url }}</span></a>{% endif %}</td>
-            <td><img src="" data-task="{{ task.taskJSON }}" alt="task graph" rel="task-graph"></td>
             <td>{{ task.state }}</td>
-            <td>{{ task.updatedAt }}</td>
           </tr>
           {% endfor %}
         </tbody>
@@ -47,4 +44,34 @@
 <script src='/asset/js/font-awesome-mappings.js'></script>
 <script src="/vendor/paper/dist/paper-full.min.js"></script>
 <script src="/asset/js/task-graph.js"></script>
+<script>
+  $.subscribe( 'paper:ready', function() {
+    var tasks = [];
+    $( '.task' ).each( function( idx ) {
+      var task = $( this ).data( 'task' );
+      tasks.push( task );
+
+      setTimeout( function() {
+        $.publish( 'task:add', [ {x: task.coordX, y: task.coordY }, task.id, stateColorMap[ task.state ].fillColor, stateColorMap[ task.state ].textColor, faMap[ task.icon ].char ] );
+      }, 100 * idx );
+    });
+
+    $.subscribe( 'task:added', function( event, task ) {
+      var coords = { x: convertPointToCoord( task.point.x ), y: -convertPointToCoord( task.point.y ) };
+      taskId = parseInt( task._name.substring( 1 ), 10 );
+
+      var found = false;
+      for( var i = 0; i < tasks.length; i++ ) {
+        if( tasks[ i ].id == taskId ) {
+          found = true;
+          break;
+        }
+      }
+
+      if( !found ) {
+        location.href = '/task/new?coordX=' + coords.x + '&coordY=' + coords.y + '&topic={{ topic.id }}';
+      }
+    });
+  });
+</script>
 {% endblock %}
