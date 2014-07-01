@@ -17,11 +17,17 @@
 				<a href="/" class="navbar-brand">Eisenhower</a>
 			</div>
 			<ul class="nav navbar-nav navbar-right">
+        {% if session.email %}
         <li><a href="/tasks">Tasks</a></li>
         <li><a href="/topics">Topics</a></li>
         <li>
           <a href="#" class="persona-logout"><span class="fa fa-lock"></span> logout</a>
         </li>
+        {% else %}
+        <li>
+          <a href="#" class="persona-login"><span class="fa fa-unlock-alt"></span> login</a>
+        </li>
+        {% endif %}
 				<li>
           <a href="https://github.com/fuzzyfox/eisenhower">
             <span class="fa fa-github"></span> fuzzyfox/eisenhower
@@ -68,67 +74,15 @@
 	</footer>
 	{% endblock %}
 
+  <!-- base libraries -->
   <script src="/vendor/jquery/dist/jquery.min.js"></script>
   <script src="/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+
+  <!-- persona/auth handling (client-side) -->
   <script src="https://login.persona.org/include.js"></script>
-  <script>
-    // login button? when clicked try login
-    var personaLoginBtns = Array.prototype.slice.call( document.querySelectorAll('.persona-login') );
-    personaLoginBtns.filter( function( btn ) {
-      btn.addEventListener( 'click', function() {
-        navigator.id.request();
-      }, false);
-    });
+  <script src="/asset/js/auth.js" data-redirect="{{ redirect }}"></script>
 
-    // logout button? set to display current user + on click logout.
-    var personaLogoutBtns = Array.prototype.slice.call( document.querySelectorAll('.persona-logout') );
-    personaLogoutBtns.filter( function( btn ) {
-      btn.addEventListener( 'click', function() {
-        navigator.id.logout();
-        location.href = '/login';
-      }, false);
-    });
-
-    navigator.id.watch({
-      onlogin: function(assertion) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/persona/verify", true);
-        xhr.setRequestHeader("Content-Type", "application/json");
-        xhr.addEventListener("loadend", function(e) {
-          var data = JSON.parse(this.responseText);
-          if (data && data.status === "okay") {
-            console.log("You have been logged in as: " + data.email);
-
-            if( '{{ redirect }}' !== '' ) {
-              location.href = '{{ redirect }}';
-              return;
-            }
-
-            if( location.pathname === '/login') {
-              location.href = '/';
-            }
-          }
-        }, false);
-
-        xhr.send(JSON.stringify({
-          assertion: assertion
-        }));
-      },
-      onlogout: function() {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "/persona/logout", true);
-        xhr.addEventListener("loadend", function(e) {
-          console.log("You have been logged out");
-
-          personaLogoutBtns.filter( function( btn ) {
-            btn.parentNode.remove( btn );
-          });
-        });
-        xhr.send();
-      }
-    });
-  </script>
-
+  <!-- custom scripts for this page -->
   {% block custom_scripts %}
   {% endblock %}
 </body>

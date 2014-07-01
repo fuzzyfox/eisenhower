@@ -31,7 +31,8 @@ module.exports = {
       res.render( 'user/details.html', {
         title: 'User details',
         user: user,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   }

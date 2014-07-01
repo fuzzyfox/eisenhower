@@ -61,14 +61,16 @@ app.get( '/healthcheck', function( req, res ) {
 app.get( '/', function( req, res ) {
 	res.render( 'index.html', {
     title: 'Home',
-    flash: req.flash()
+    flash: req.flash(),
+    session: req.session
   });
 });
 
 app.get( '/paper-test', function( req, res ) {
   res.render( 'paper-test.html', {
     title: 'Paper Test',
-    flash: req.flash()
+    flash: req.flash(),
+    session: req.session
   });
 });
 
@@ -86,7 +88,12 @@ else if( env.get( 'node_env' ) === 'development' ) {
   // dumb development login mechanism
   app.get( '/login', function( req, res ) {
     // load fake login form
-    res.render( 'dumb_login.html', { title: 'Dumby Login', redirect: req.flash( 'redirect' ) } );
+    res.render( 'dumb_login.html', {
+      title: 'Dumby Login',
+      redirect: req.flash( 'redirect' ),
+      flash: req.flash(),
+      session: req.session
+    });
   });
   app.post( '/login', function( req, res ) {
     req.session.email = req.body.email;

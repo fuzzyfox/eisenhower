@@ -11,7 +11,8 @@ module.exports = {
       res.render( 'task/list.html', {
         title: 'Tasks',
         tasks: tasks,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   },
@@ -22,7 +23,8 @@ module.exports = {
         coordX: req.query.coordX || undefined,
         coordY: req.query.coordY || undefined,
       },
-      flash: req.flash()
+      flash: req.flash(),
+      session: req.session
     });
   },
   update: function( req, res ) {
@@ -34,7 +36,8 @@ module.exports = {
       res.render( 'task/create.html', {
         title: 'Update Task',
         task: task,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   },
@@ -49,7 +52,8 @@ module.exports = {
         title: 'Task: ' + task.name,
         task: task,
         taskJSON: JSON.stringify( task ),
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   }

@@ -3,6 +3,7 @@
 module.exports = function( req, res ) {
 	res.render( 'login.html', {
 		title: 'Login',
-		redirect: req.flash( 'redirect' )
+		redirect: req.flash( 'redirect' ),
+    session: req.session
 	});
 };

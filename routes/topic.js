@@ -15,14 +15,16 @@ module.exports = {
       res.render( 'topic/list.html', {
         title: 'Topics',
         topics: topics,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   },
   create: function( req, res ) {
     res.render( 'topic/create.html', {
       title: 'New Topic',
-      flash: req.flash()
+      flash: req.flash(),
+      session: req.session
     });
   },
   update: function( req, res ) {
@@ -34,7 +36,8 @@ module.exports = {
       res.render( 'topic/update.html', {
         title: 'Update Topic',
         topic: topic,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   },
@@ -60,7 +63,8 @@ module.exports = {
       res.render( 'topic/details.html', {
         title: 'Topic: ' + topic.name,
         topic: topic,
-        flash: req.flash()
+        flash: req.flash(),
+        session: req.session
       });
     });
   }
