@@ -9,7 +9,7 @@ module.exports = function( req, res, next ) {
 	}
 
 	// enforce mofo email
-	if( !/@mozillafoundation\.org$/.test( req.session.email ) ) {
+	if( ! /@mozillafoundation\.org$/.test( req.session.email ) ) {
 		req.flash( 'redirect', req.url );
 		req.flash( 'info', 'sorry... right now only crazy mofos can login' );
 		return res.redirect( '/login' );

@@ -14,9 +14,7 @@ module.exports = {
       });
       res.render( 'topic/list.html', {
         title: 'Topics',
-        topics: topics,
-        flash: req.flash(),
-        session: req.session
+        topics: topics
       });
     });
   },
@@ -33,11 +31,9 @@ module.exports = {
         return res.status( 404 ).render( 'error.html', { errors: error } );
       }
 
-      res.render( 'topic/update.html', {
+      res.render( 'topic/create.html', {
         title: 'Update Topic',
-        topic: topic,
-        flash: req.flash(),
-        session: req.session
+        topic: topic
       });
     });
   },
@@ -62,9 +58,7 @@ module.exports = {
 
       res.render( 'topic/details.html', {
         title: 'Topic: ' + topic.name,
-        topic: topic,
-        flash: req.flash(),
-        session: req.session
+        topic: topic
       });
     });
   }

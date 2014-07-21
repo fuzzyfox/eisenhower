@@ -16,11 +16,17 @@ module.exports = {
   },
   remove: function( req, res ) {
     // code to come
-    res.send( req.url );
+    res.status( 501 ).render( 'error.html', { errors: [{
+      message: 'This functionality is yet to be built',
+      code: 501
+    }] } );
   },
   update: function( req, res ) {
     // code to come
-    res.send( req.url );
+    res.status( 501 ).render( 'error.html', { errors: [{
+      message: 'This functionality is yet to be built',
+      code: 501
+    }] } );
   },
   details: function( req, res ) {
     api.details( req, function( error, user ) {
@@ -30,9 +36,7 @@ module.exports = {
 
       res.render( 'user/details.html', {
         title: 'User details',
-        user: user,
-        flash: req.flash(),
-        session: req.session
+        user: user
       });
     });
   }

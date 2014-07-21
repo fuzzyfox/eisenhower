@@ -26,6 +26,15 @@ function onlogin( assertion ) {
         return;
       }
 
+      if( !/@mozillafoundation\.org$/.test( data.email ) ) {
+        $.post( 'flash', {
+          type: 'info',
+          msg: 'sorry... right now only crazy mofos can login'
+        }, function() {
+          navigator.id.logout();
+        });
+      }
+
       if( location.pathname === '/login' ) {
         location.href = '/';
         return;

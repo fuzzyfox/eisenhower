@@ -117,12 +117,9 @@ else {
 // enforce login from here on
 app.all([
   '/api/*',
-  '/user',
-  '/user/*',
-  '/topics',
-  '/topic/*',
-  '/task*',
-  '/task/*',
+  '/user*',
+  '/topic*',
+  '/task*'
 ], routes.auth.enforce, routes.auth.newUser );
 
 // no cache on api routes
@@ -182,6 +179,8 @@ app.get( '/user/:id?', function( req, res ) {
   }
   routes.user.details( req, res );
 });
+app.get( '/user/update/:id', routes.user.update );
+app.get( '/user/delete/:id', routes.user.remove );
 
 // api routes for users
 app.get( '/api/user/:id?', function( req, res ) {
@@ -192,6 +191,15 @@ app.get( '/api/user/:id?', function( req, res ) {
   routes.api.user.details( req, res );
 });
 app.post( '/api/user/new', routes.api.user.create );
+
+/*
+  Ajax add flash messages
+ */
+
+app.get( '/flash', function( req, res ) {
+  req.flash( req.query.type, req.query.message );
+  res.jsonp( { type: req.query.type, message: req.query.message } );
+});
 
 // not found
 app.get( '*', function( req, res ) {
