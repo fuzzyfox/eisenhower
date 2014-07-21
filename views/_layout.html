@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/vendor/bootswatch/darkly/bootstrap.css">
 	<link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="/asset/css/eisenhower.css">
   {% block custom_styles %}
@@ -11,28 +11,48 @@
 </head>
 <body>
 	{% block header %}
-	<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
 				<a href="/" class="navbar-brand">Eisenhower</a>
 			</div>
 			<ul class="nav navbar-nav navbar-right">
         {% if session.email %}
-        <li><a href="/tasks">Tasks</a></li>
-        <li><a href="/topics">Topics</a></li>
-        <li>
-          <a href="#" class="persona-logout"><span class="fa fa-lock"></span> logout</a>
+        <li class="dropdown">
+          <a href="/tasks" class="dropdown-toggle" data-toggle="dropdown">Tasks <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/tasks">List all</a></li>
+            <li class="divider"></li>
+            <li><a href="/task/new">New</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="/topics" class="dropdown-toggle" data-toggle="dropdown">Topics <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/topics">List all</a></li>
+            <li class="divider"></li>
+            <li><a href="/topic/new">New</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="/user" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ session.user.firstname if session.user.firstname else session.email }} <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="/user">Profile</a></li>
+            <li><a href="/user/update/{{ session.user.id }}">Settings</a></li>
+            <li class="divider"></li>
+            <li><a href="#" class="persona-logout"><span class="fa fa-lock"></span> logout</a></li>
+          </ul>
         </li>
         {% else %}
         <li>
           <a href="#" class="persona-login"><span class="fa fa-unlock-alt"></span> login</a>
         </li>
-        {% endif %}
-				<li>
+        <li>
           <a href="https://github.com/fuzzyfox/eisenhower">
             <span class="fa fa-github"></span> fuzzyfox/eisenhower
           </a>
         </li>
+        {% endif %}
 			</ul>
 		</div>
 	</nav>

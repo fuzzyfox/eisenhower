@@ -25,9 +25,9 @@
             <td><a href="/task/{{ task.id }}">{{ task.name }}</a></td>
             <td>{{ task.notes | truncate(140) }}</td>
             <td>{% if task.url %}<a href="{{ task.url }}"><i class="fa fa-external-link"></i> <span class="sr-only">{{ task.url }}</span></a>{% endif %}</td>
-            <td><img src="" data-task="{{ task.taskJSON }}" alt="task graph" rel="task-graph"></td>
+            <td><img src="" class="img-rounded" data-task="{{ task.taskJSON }}" alt="task graph" rel="task-graph"></td>
             <td>{{ task.state }}</td>
-            <td>{{ task.updatedAt }}</td>
+            <td><time datetime="{{ task.updatedAt }}" class="no-wrap">{{ task.updatedAt | momentFromNow }}</time></td>
           </tr>
           {% endfor %}
         </tbody>

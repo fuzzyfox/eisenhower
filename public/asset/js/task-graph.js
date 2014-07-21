@@ -11,23 +11,23 @@ $.publish = o.trigger.bind(o);
 // state color map
 var stateColorMap = {
   'pending': {
-    fillColor: 'white',
-    textColor: '#444'
+    fillColor: '#464545',
+    textColor: 'white'
   },
   'complete': {
-    fillColor: '#6ecba9',
+    fillColor: '#00bc8c',
     textColor: 'white'
   },
   'incomplete': {
-    fillColor: '#ffcd36',
+    fillColor: '#f39c12',
     textColor: 'white'
   },
   'abandoned': {
-    fillColor: '#fe4040',
+    fillColor: '#e74c3c',
     textColor: 'white'
   },
   'ongoing': {
-    fillColor: '#63cfea',
+    fillColor: '#3498db',
     textColor: 'white'
   },
 };

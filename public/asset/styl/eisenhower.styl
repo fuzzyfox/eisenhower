@@ -1,16 +1,16 @@
-$pendingTaskBg = #fff;
-$pendingTaskText = #444;
-$completeTaskBg = #6ecba9;
+$pendingTaskBg = #464545;
+$pendingTaskText = #fff;
+$completeTaskBg = #00bc8c;
 $completeTaskText = #fff;
-$incompleteTaskBg = #ffcd36;
+$incompleteTaskBg = #f39c12;
 $incompleteTaskText = #fff;
-$abandonedTaskBg = #fe4040;
+$abandonedTaskBg = #e74c3c;
 $abandonedTaskText = #fff;
-$ongoingTaskBg = #63cfea;
+$ongoingTaskBg = #3498db;
 $ongoingTaskText = #fff;
 
 img[rel=task-graph] {
-  background: url(/asset/img/loading.gif) center no-repeat;
+  background: #fff url(/asset/img/loading.gif) center no-repeat;
 }
 
 table.preview-list {
@@ -51,14 +51,18 @@ table.preview-list {
   font-size: 1.2em;
 }
 
+#task-graph {
+  background: #fff;
+}
+
 .task {
-  .fa.task-icon,
   .fa.task-icon::before {
     border-radius: 100%;
-    padding: 0.4em;
-    width: 1em;
-    height: 1em;
+    line-height: 2em;
+    width: 2em;
+    height: 2em;
     text-align: center;
+    display: block;
   }
 
   &.task-pending .fa.task-icon::before {
@@ -82,4 +86,12 @@ table.preview-list {
     background: $ongoingTaskBg;
     color: $ongoingTaskText;
   }
+}
+
+textarea {
+  resize: vertical;
+}
+
+.no-wrap {
+  white-space: nowrap;
 }

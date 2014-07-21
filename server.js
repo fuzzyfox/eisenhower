@@ -9,6 +9,7 @@ var morgan = require( 'morgan' );
 var Habitat = require( 'habitat' );
 var nunjucks = require( 'nunjucks' );
 var marked = require( 'marked' );
+var moment = require( 'moment' );
 var routes = require( './routes' );
 var db = require( './models' );
 
@@ -46,6 +47,19 @@ nunjucksEnv.addFilter( 'marked', function( str ) {
   return marked( str );
 });
 
+// add moment format time
+nunjucksEnv.addFilter( 'momentFromNow', function( str, format ) {
+  return moment( str ).fromNow();
+});
+
+// add session to res.locals
+app.use( function( req, res, next ) {
+  res.locals.session = req.session;
+  res.locals.flash = req.flash();
+
+  next();
+});
+
 // add nunjucks to res.render
 nunjucksEnv.express( app );
 
@@ -60,17 +74,13 @@ app.get( '/healthcheck', function( req, res ) {
 // landing pages
 app.get( '/', function( req, res ) {
 	res.render( 'index.html', {
-    title: 'Home',
-    flash: req.flash(),
-    session: req.session
+    title: 'Home'
   });
 });
 
 app.get( '/paper-test', function( req, res ) {
   res.render( 'paper-test.html', {
-    title: 'Paper Test',
-    flash: req.flash(),
-    session: req.session
+    title: 'Paper Test'
   });
 });
 
@@ -91,7 +101,6 @@ else if( env.get( 'node_env' ) === 'development' ) {
     res.render( 'dumb_login.html', {
       title: 'Dumby Login',
       redirect: req.flash( 'redirect' ),
-      flash: req.flash(),
       session: req.session
     });
   });

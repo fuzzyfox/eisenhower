@@ -1,6 +1,7 @@
 'use strict';
 
 var api = require( './api/task');
+var getTopicList = require( './api/topic' ).list;
 
 module.exports = {
   list: function( req, res ) {
@@ -10,34 +11,34 @@ module.exports = {
       });
       res.render( 'task/list.html', {
         title: 'Tasks',
-        tasks: tasks,
-        flash: req.flash(),
-        session: req.session
+        tasks: tasks
       });
     });
   },
   create: function( req, res ) {
-    res.render( 'task/create.html', {
-      title: 'New Task',
-      task: {
-        coordX: req.query.coordX || undefined,
-        coordY: req.query.coordY || undefined,
-      },
-      flash: req.flash(),
-      session: req.session
+    getTopicList( req, function( error, topics ) {
+      res.render( 'task/create.html', {
+        title: 'New Task',
+        task: {
+          coordX: req.query.coordX || undefined,
+          coordY: req.query.coordY || undefined,
+        },
+        topics: topics
+      });
     });
   },
   update: function( req, res ) {
-    api.getById( req, function( error, task ) {
-      if( error ) {
-        return res.status( 404 ).render( 'error.html', { errors: error } );
-      }
+    getTopicList( req, function( error, topics ) {
+      api.getById( req, function( error, task ) {
+        if( error ) {
+          return res.status( 404 ).render( 'error.html', { errors: error } );
+        }
 
-      res.render( 'task/create.html', {
-        title: 'Update Task',
-        task: task,
-        flash: req.flash(),
-        session: req.session
+        res.render( 'task/create.html', {
+          title: 'Update Task',
+          task: task,
+          topics: topics
+        });
       });
     });
   },
@@ -51,9 +52,7 @@ module.exports = {
       res.render( 'task/details.html', {
         title: 'Task: ' + task.name,
         task: task,
-        taskJSON: JSON.stringify( task ),
-        flash: req.flash(),
-        session: req.session
+        taskJSON: JSON.stringify( task )
       });
     });
   }

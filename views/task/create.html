@@ -8,7 +8,7 @@
         <legend>Task State</legend>
         <div class="row">
           <div class="col-xs-12 col-md-6">
-            <canvas id="task-graph" width="500" height="500" class="img-responsive"></canvas>
+            <canvas id="task-graph" width="500" height="500" class="img-responsive img-rounded"></canvas>
           </div>
           <section class="col-xs-12 col-md-6">
             <label>Coordinates</label>
@@ -56,14 +56,14 @@
         <!-- Task Name-->
         <div class="form-group">
           <label class="control-label" for="name">Name</label>
-          <input id="name" name="name" placeholder="unnamed task" class="form-control input-md" type="text" value="{{ task.name }}">
+          <input id="name" name="name" placeholder="unnamed task" class="form-control input-md" type="text" value="{{ task.name }}" required>
           <p class="help-block">Short but sweet name for your task</p>
         </div>
 
         <!-- Task Notes -->
         <div class="form-group">
           <label class="control-label" for="notes">Notes</label>
-          <textarea class="form-control" id="notes" name="notes">{{ task.notes }}</textarea>
+          <textarea class="form-control" id="notes" name="notes" rows="3">{{ task.notes }}</textarea>
           <p class="help-block">Markdown Accepted</p>
         </div>
 
@@ -72,6 +72,17 @@
           <label class="control-label" for="url">URL</label>
           <input id="url" name="url" placeholder="http://example.com/" class="form-control input-md" type="text" value="{{ task.url }}">
           <p class="help-block">Add a link to any external tracking for this task </p>
+        </div>
+
+        <!-- Task Topic Relation -->
+        <div class="form-group">
+          <label class="control-label" for="TopicId">Topic</label>
+          <select id="TopicId" name="TopicId" class="form-control">
+            <option>topic selection optional</option>
+            {% for topic in topics %}
+            <option value="{{ topic.id }}"{{ ' selected' if topic.id == task.TopicId }}>{{ topic.name }}</option>
+            {% endfor %}
+          </select>
         </div>
 
         <!-- Button -->

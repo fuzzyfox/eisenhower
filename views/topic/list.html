@@ -21,7 +21,7 @@
             <td>{{ topic.id }}</td>
             <td><a href="/topic/{{ topic.id }}">{{ topic.name }}</a></td>
             <td>{{ topic.description | truncate(140) }}</td>
-            <td><img src="" data-task="{{ topic.tasksJSON }}" alt="task graph" rel="task-graph"></td>
+            <td><img src="" data-task="{{ topic.tasksJSON }}" alt="task graph" rel="task-graph" class="img-rounded"></td>
           </tr>
           {% endfor %}
         </tbody>
