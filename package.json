@@ -1,6 +1,6 @@
 {
   "name": "eisenhower",
-  "version": "0.0.1",
+  "version": "0.0.12",
   "description": "A little tool to create my variation on the Eisenhower Decision Matrix",
   "main": "server.js",
   "scripts": {
@@ -37,6 +37,7 @@
     "express-persona": "^0.1.2",
     "express-session": "^1.5.1",
     "habitat": "^1.1.0",
+    "helmet": "^0.4.0",
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
     "moment": "^2.7.0",

@@ -10,20 +10,13 @@ var Habitat = require( 'habitat' );
 var nunjucks = require( 'nunjucks' );
 var marked = require( 'marked' );
 var moment = require( 'moment' );
+var helmet = require( 'helmet' );
 var routes = require( './routes' );
 var db = require( './models' );
 
 // setup environment
 var env = new Habitat();
 Habitat.load();
-
-// custom debug function (console.log only when debug flag set)
-// function debug() {
-//   if( env.get( 'debug' ) ) {
-//     return console.log.apply( null, arguments );
-//   }
-//   return;
-// }
 
 // setup server
 var app = express();
@@ -33,9 +26,16 @@ app.use( bodyParser.urlencoded( { extended: true } ) );
 app.use( cookieParser() );
 app.use( session( { secret: env.get( 'session_secret' ) } ) );
 app.use( flash() );
+app.use( helmet.xframe( 'sameorigin' ) );
+app.use( helmet.hsts() );
+app.use( helmet.nosniff() );
+app.use( helmet.xssFilter() );
+
 if( env.get( 'debug' ) ) {
 	app.use( morgan( 'dev' ) );
 }
+
+app.disable( 'x-powered-by' );
 
 // setup nunjucks
 var nunjucksEnv = nunjucks.configure( 'views', {
