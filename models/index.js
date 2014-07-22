@@ -7,7 +7,7 @@ Habitat.load();
 var fs = require( 'fs' );
 var path = require( 'path' );
 var lodash = require( 'lodash' );
-var Sequelize = require( 'Sequelize' );
+var Sequelize = require( 'sequelize' );
 var sequelize = new Sequelize( env.get( 'DB_CONNECTION_URI' ) );
 var db = {};
 
