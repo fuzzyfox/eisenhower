@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "0.10"
+before_script:
+  - npm install -g grunt-cli
+before_deploy:
+  - echo "Deploying commit $TRAVIS_COMMIT"
+deploy:
+  provider: heroku
+  strategy: git
+  api_key:
+    secure: OYY1nUn7HjgsitcNSgZrGTQKsW2giafLKJpJJD9v8FrmHRcxQhWRg4evJijV1Gq23nNGoByRfahuA63HgzCO5C9B310XFGYlaGk6K943u1qDPS8h5/+V+5/Z9iB/XGpjCtXv5ZzVe+Xn1PUUHoEUrSIN6LmvuUfV2TEsqE7RDPQ=
+  app: eisenhowerio
+  on:
+    repo: fuzzyfox/eisenhower
+    branch: master
