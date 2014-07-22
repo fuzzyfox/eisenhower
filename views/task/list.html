@@ -4,6 +4,26 @@
 <main class="container">
   <div class="row">
     <div class="col-sm-12">
+      <div id="task-filters" class="pull-right">
+        Filter:&nbsp;&nbsp;
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm" data-toggle="task-pending">
+            <fa class="fa fa-eye"></fa> Pending
+          </button>
+          <button type="button" class="btn btn-success btn-sm active" data-toggle="task-complete">
+            <fa class="fa fa-eye-slash"></fa> Complete
+          </button>
+          <button type="button" class="btn btn-warning btn-sm" data-toggle="task-incomplete">
+            <fa class="fa fa-eye"></fa> Incomplete
+          </button>
+          <button type="button" class="btn btn-danger btn-sm" data-toggle="task-abandoned">
+            <fa class="fa fa-eye"></fa> Abandoned
+          </button>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="task-ongoing">
+            <fa class="fa fa-eye"></fa> Ongoing
+          </button>
+        </div>
+      </div>
       <table class="table table-striped preview-list">
         <thead>
           <tr>
@@ -52,5 +72,21 @@
   $.subscribe( 'task:added', function() {
     console.log( 'added', arguments );
   });
+
+  // tmp ui toggles for bothersome tasks
+  $( '#task-filters' ).on( 'click', '.btn', function( event ) {
+    var toggleTasks = $( this ).toggleClass( 'active' ).data( 'toggle' );
+    $( '.task.' + toggleTasks ).toggle();
+
+    if( $( this ).hasClass( 'active' ) ) {
+      $( this ).children( '.fa' ).removeClass( 'fa-eye' ).addClass( 'fa-eye-slash' );
+    }
+    else {
+      $( this ).children( '.fa' ).addClass( 'fa-eye' ).removeClass( 'fa-eye-slash' );
+    }
+    return false;
+  });
+
+  $( '.task.task-complete' ).toggle();
 </script>
 {% endblock %}

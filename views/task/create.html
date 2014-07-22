@@ -42,11 +42,11 @@
         <div class="form-group">
           <label class="control-label" for="state">State</label>
           <select id="state" name="state" class="form-control">
-            <option value="pending" selected>pending</option>
-            <option value="complete">complete</option>
-            <option value="incomplete">incomplete</option>
-            <option value="abandoned">abandoned</option>
-            <option value="ongoing">ongoing</option>
+            <option value="pending"{{ ' selected' if task.state == 'pending' }}>pending</option>
+            <option value="complete"{{ ' selected' if task.state == 'complete' }}>complete</option>
+            <option value="incomplete"{{ ' selected' if task.state == 'incomplete' }}>incomplete</option>
+            <option value="abandoned"{{ ' selected' if task.state == 'abandoned' }}>abandoned</option>
+            <option value="ongoing"{{ ' selected' if task.state == 'ongoing' }}>ongoing</option>
           </select>
         </div>
       </fieldset>

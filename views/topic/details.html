@@ -17,6 +17,7 @@
             <th>name</th>
             <th>url</th>
             <th>state</th>
+            <th>controls</th>
           </tr>
         </thead>
         <tbody>
@@ -27,10 +28,20 @@
             <td><a href="/task/{{ task.id }}">{{ task.name }}</a></td>
             <td>{% if task.url %}<a href="{{ task.url }}"><i class="fa fa-external-link"></i> <span class="sr-only">{{ task.url }}</span></a>{% endif %}</td>
             <td>{{ task.state }}</td>
+            <td>
+              <div class="btn-group">
+                <a href="/task/update/{{ task.id }}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i><span class="sr-only">Edit Task</span></a>
+                <a href="/task/delete/{{ task.id }}" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i><span class="sr-only">Delete Task</span></a>
+              </div>
+            </td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+      <div id="topic-controls" class="pull-right">
+        <a href="/task/new/?topic={{ topic.id }}" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add Task</a>
+        <a href="/topic/update/{{ topic.id }}" class="btn btn-sm btn-default"><i class="fa fa-edit"></i> Edit Topic</a>
+      </div>
     </div>
   </div>
 </main>

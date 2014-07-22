@@ -13,10 +13,12 @@
           <dl>
             <dt>state</dt>
             <dd>{{ task.state }}</dd>
+            {% if task.url %}
             <dt>link</dt>
             <dd><a href="{{ task.url }}">{{ task.url if task.url else 'null' }}</a></dd>
+            {% endif %}
             <dt>topic</dt>
-            <dd>{{ task.topic.name }}</dd>
+            <dd><a href="/topic/{{ task.topic.id }}">{{ task.topic.name }}</a></dd>
           </dl>
         </div>
         <div class="col-sm-6">

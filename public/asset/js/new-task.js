@@ -128,12 +128,32 @@ $( function() {
 
     // on success add flash msg and redirect to new task
     promise.done( function( task ) {
-      $.get( '/flash', {
-        type: 'success',
-        message: 'Task succesfully added/updated.'
-      }, function() {
-        location.href = '/task/' + task.id;
-      });
+      function done() {
+        $.get( '/flash', {
+          type: 'success',
+          message: 'Task succesfully added/updated.'
+        }, function() {
+          if( getQueryVariable( 'topic' ) ) {
+            location.href = '/topic/' + getQueryVariable( 'topic' );
+            return;
+          }
+
+          if( document.referrer ) {
+            location.href = document.referrer;
+            return;
+          }
+
+          location.href = '/task/' + task.id;
+        });
+      }
+
+      // don't need to think about topics, we're done done
+      if( !getQueryVariable( 'topic' ) ) {
+        done();
+      }
+
+      // oop there seems to be a topic to...
+      $.get( '/api/topic/' + getQueryVariable( 'topic' ) + '/take/' + task.id, done );
     });
 
     // on fail flash error msg, and reload page
