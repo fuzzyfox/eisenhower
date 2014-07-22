@@ -4,7 +4,8 @@
   "description": "A little tool to create my variation on the Eisenhower Decision Matrix",
   "main": "server.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "postinstall": "bower install"
   },
   "repository": {
     "type": "git",
