@@ -60,12 +60,14 @@
 
   <section class="notifications container">
     {% for type, messages in flash %}
-      {% for message in messages %}
-      <div class="alert{{ ' alert-' + type if type }} alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true"><i class="fa fa-times"></i></span><span class="sr-only">Close</span></button>
-        {{ message }}
-      </div>
-      {% endfor %}
+      {% if type != 'redirect' %}
+        {% for message in messages %}
+        <div class="alert{{ ' alert-' + type if type }} alert-dismissible fade in" role="alert">
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true"><i class="fa fa-times"></i></span><span class="sr-only">Close</span></button>
+          {{ message }}
+        </div>
+        {% endfor %}
+      {% endif %}
     {% endfor %}
 
     {% block notifications %}{% endblock %}

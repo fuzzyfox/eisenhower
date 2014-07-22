@@ -40,6 +40,29 @@ function debounce( fn, wait, immediate ) {
   };
 }
 
+/**
+ * Get a parameter passed through the query string
+ *
+ * @param  {String} variable      variable name as string
+ * @param  {String} [queryString] use a different query string
+ * @return {Mixed}                uri decoded value for variable OR undefined
+ */
+function getQueryVariable(variable, queryString){
+  queryString = queryString || window.location.search;
+
+  var query = queryString.substr( 1 ),
+    vars  = query.split( '&' ), // split out variable declarations
+    pairs;
+
+  for( var i = 0, j = vars.length; i < j; i++ ) {
+    pairs = vars[ i ].split( '=' ); // split into [ key, value ] pairs
+
+    if( decodeURIComponent( pairs[ 0 ] ) === variable ) {
+      return decodeURIComponent( pairs[ 1 ] );
+    }
+  }
+}
+
 /*
   Deal w/ task graph
  */

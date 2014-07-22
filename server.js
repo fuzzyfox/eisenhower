@@ -94,21 +94,6 @@ if( env.get( 'persona_audience' ) ) {
 	// allow login before we launch
 	app.get( '/login', routes.auth.login );
 }
-else if( env.get( 'node_env' ) === 'development' ) {
-  // dumb development login mechanism
-  app.get( '/login', function( req, res ) {
-    // load fake login form
-    res.render( 'dumb_login.html', {
-      title: 'Dumby Login',
-      redirect: req.flash( 'redirect' ),
-      session: req.session
-    });
-  });
-  app.post( '/login', function( req, res ) {
-    req.session.email = req.body.email;
-    res.redirect( req.body.redirect );
-  });
-}
 else {
   console.error( 'failed to launch... can\'t no auth method' );
   process.exit( 1 );

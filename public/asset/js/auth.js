@@ -20,14 +20,14 @@ function onlogin( assertion ) {
     assertion: assertion
   }, function( data ) {
     if( data.status === 'okay' ) {
-      console.log( 'you have been logged in' );
+      console.log( 'you have been logged in as %s', data.email );
       if( redirectURL ) {
         location.href = redirectURL;
         return;
       }
 
       if( !/@mozillafoundation\.org$/.test( data.email ) ) {
-        $.post( 'flash', {
+        $.get( '/flash', {
           type: 'info',
           msg: 'sorry... right now only crazy mofos can login'
         }, function() {
@@ -51,6 +51,7 @@ function onlogin( assertion ) {
 function onlogout() {
   $.post( '/persona/logout', function( data ) {
     if( $( '.persona-logout' ).length > 0 ) {
+      console.log( 'you have been logged out' );
       location.reload( true );
     }
   });

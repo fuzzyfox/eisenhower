@@ -43,6 +43,7 @@
     "morgan": "^1.1.1",
     "mysql": "^2.3.2",
     "nunjucks": "^1.0.5",
+    "request": "^2.38.0",
     "sequelize": "^1.7.9"
   }
 }

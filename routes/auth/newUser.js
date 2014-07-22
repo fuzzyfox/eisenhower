@@ -12,7 +12,6 @@ module.exports = function( req, res, next ) {
       return next();
     }
 
-    console.log( req.url );
     if( req.url !== '/user/new' && req.url !== '/api/user/new' ) {
       res.redirect( '/user/new' );
     }
