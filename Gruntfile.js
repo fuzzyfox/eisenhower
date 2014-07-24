@@ -54,7 +54,6 @@ module.exports = function( grunt ) {
       }
     },
 
-    // running `grunt watch` will watch for changes
     watch: {
       files: [
         '*.js',
@@ -72,6 +71,18 @@ module.exports = function( grunt ) {
           spawn: false
         }
       }
+    },
+
+    bump: {
+      options: {
+        files: [ 'package.json', 'bower.json' ],
+        commit: true,
+        commitMessage: 'version bump to v%VERSION%',
+        commitFiles: [ 'package.json', 'bower.json' ],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        push: false
+      }
     }
   });
 
@@ -79,6 +90,7 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-stylus' );
   grunt.loadNpmTasks( 'grunt-express-server' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
+  grunt.loadNpmTasks('grunt-bump');
 
   grunt.registerTask( 'default', [ 'jshint', 'stylus', 'express:dev', 'watch' ] );
   grunt.registerTask( 'test', [ 'jshint' ] );
