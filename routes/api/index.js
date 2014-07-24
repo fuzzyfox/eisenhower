@@ -1,8 +1,6 @@
 'use strict';
 
 var fs = require( 'fs' );
-var path = require( 'path' );
-var lodash = require( 'lodash' );
 var routes = {};
 
 // load all definitions
