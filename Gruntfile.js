@@ -3,14 +3,21 @@ module.exports = function( grunt ) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON( 'package.json' ),
+    banner: '/**\n' +
+            ' * <%= pkg.name %>\n *\n' +
+            ' * <%= pkg.description %>\n *\n' +
+            ' * @project <%= pkg.name %>\n' +
+            ' * @version v<%= pkg.version %>\n' +
+            ' * @author <%= pkg.author.name %> <<%= pkg.author.email %>>\n' +
+            ' * @copyright grunt.template.today("yyyy") by the author\n' +
+            ' * @license <%= pkg.license %>\n' +
+            ' */\n\n',
+
+    // hint all the things
     jshint: {
       options: {
         'globals': {
           'module': false,
-          'angular': false,
-          'console': false,
-          'google': false,
-          'WebmakerAuthClient': false
         },
         'bitwise': true,
         'browser': true,
@@ -37,6 +44,7 @@ module.exports = function( grunt ) {
       ]
     },
 
+    // run server in dev environment
     express: {
       dev: {
         options: {
@@ -48,14 +56,36 @@ module.exports = function( grunt ) {
       }
     },
 
-    stylus: {
-      compile: {
+    // compile styles
+    less: {
+      development: {
         files: {
-          'public/asset/css/eisenhower.css': 'public/asset/styl/eisenhower.styl'
+          'public/asset/css/eisenhower.css': 'public/asset/less/eisenhower.less'
+        }
+      },
+      production: {
+        options: {
+          cleancss: true,
+          sourceMap: true
+        },
+        files: {
+          'public/asset/css/eisenhower.css': 'public/asset/less/eisenhower.less'
         }
       }
     },
 
+    // add banner to css + js
+    usebanner: {
+      options: {
+        position: 'top',
+        banner: '<%= banner %>'
+      },
+      files: {
+        src: [ 'public/asset/css/eisenhower.css' ]
+      }
+    },
+
+    // run tasks on file changes
     watch: {
       files: [
         '*.js',
@@ -65,9 +95,9 @@ module.exports = function( grunt ) {
         'public/asset/js/*.js',
         'public/asset/styl/*.styl'
       ],
-      tasks: [ 'jshint', 'stylus', 'express:dev' ],
+      tasks: [ 'jshint', 'less', 'express:dev' ],
       express: {
-        files: [ '*.js', 'models/*.js', 'routes/*.js', 'routes/*/*.js' ],
+        files: [ '*.js', 'models/**/*.js', 'routes/**/*.js' ],
         tasks:  [ 'express:dev' ],
         options: {
           spawn: false
@@ -75,6 +105,7 @@ module.exports = function( grunt ) {
       }
     },
 
+    // bump version number
     bump: {
       options: {
         files: [ 'package.json', 'bower.json' ],
@@ -89,11 +120,13 @@ module.exports = function( grunt ) {
   });
 
   grunt.loadNpmTasks( 'grunt-contrib-jshint' );
-  grunt.loadNpmTasks( 'grunt-contrib-stylus' );
+  grunt.loadNpmTasks( 'grunt-contrib-less' );
   grunt.loadNpmTasks( 'grunt-express-server' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
+  grunt.loadNpmTasks('grunt-banner');
   grunt.loadNpmTasks('grunt-bump');
 
-  grunt.registerTask( 'default', [ 'jshint', 'stylus', 'express:dev', 'watch' ] );
+  grunt.registerTask( 'default', [ 'jshint', 'less:development', 'express:dev', 'watch' ] );
+  grunt.registerTask( 'build', [ 'less:production', 'usebanner' ] );
   grunt.registerTask( 'test', [ 'jshint' ] );
 };

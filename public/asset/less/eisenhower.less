@@ -1,13 +1,16 @@
-$pendingTaskBg = #464545;
-$pendingTaskText = #fff;
-$completeTaskBg = #00bc8c;
-$completeTaskText = #fff;
-$incompleteTaskBg = #f39c12;
-$incompleteTaskText = #fff;
-$abandonedTaskBg = #e74c3c;
-$abandonedTaskText = #fff;
-$ongoingTaskBg = #3498db;
-$ongoingTaskText = #fff;
+@import '../../vendor/bootstrap/less/bootstrap';
+@import '../../vendor/bootswatch/darkly/variables';
+
+@pendingTaskBg: @gray-darker;
+@pendingTaskText: #fff;
+@completeTaskBg: @brand-success;
+@completeTaskText: #fff;
+@incompleteTaskBg: @brand-warning;
+@incompleteTaskText: #fff;
+@abandonedTaskBg: @brand-danger;
+@abandonedTaskText: #fff;
+@ongoingTaskBg: @brand-info;
+@ongoingTaskText: #fff;
 
 img[rel=task-graph] {
   background: #fff url(/asset/img/loading.gif) center no-repeat;
@@ -62,25 +65,25 @@ table.preview-list {
   }
 
   &.task-pending .fa.task-icon::before {
-    background: $pendingTaskBg;
-    color: $pendingTaskText;
+    background: @pendingTaskBg;
+    color: @pendingTaskText;
     border: 1px solid #eee;
   }
   &.task-complete .fa.task-icon::before {
-    background: $completeTaskBg;
-    color: $completeTaskText;
+    background: @completeTaskBg;
+    color: @completeTaskText;
   }
   &.task-incomplete .fa.task-icon::before {
-    background: $incompleteTaskBg;
-    color: $incompleteTaskText;
+    background: @incompleteTaskBg;
+    color: @incompleteTaskText;
   }
   &.task-abandoned .fa.task-icon::before {
-    background: $abandonedTaskBg;
-    color: $abandonedTaskText;
+    background: @abandonedTaskBg;
+    color: @abandonedTaskText;
   }
   &.task-ongoing .fa.task-icon::before {
-    background: $ongoingTaskBg;
-    color: $ongoingTaskText;
+    background: @ongoingTaskBg;
+    color: @ongoingTaskText;
   }
 }
 
