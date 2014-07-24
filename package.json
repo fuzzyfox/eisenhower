@@ -1,9 +1,10 @@
 {
   "name": "eisenhower",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "A little tool to create my variation on the Eisenhower Decision Matrix",
   "main": "server.js",
   "scripts": {
+    "start": "node server",
     "test": "grunt test",
     "postinstall": "bower install"
   },
