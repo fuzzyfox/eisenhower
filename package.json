@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server",
     "test": "grunt test",
-    "postinstall": "bower install"
+    "postinstall": "if ! which bower > /dev/null; then npm install -g bower; fi && bower install"
   },
   "repository": {
     "type": "git",
