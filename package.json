@@ -1,6 +1,6 @@
 {
   "name": "eisenhower",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "A little tool to create my variation on the Eisenhower Decision Matrix",
   "main": "server.js",
   "scripts": {
