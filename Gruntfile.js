@@ -93,7 +93,7 @@ module.exports = function( grunt ) {
         'routes/*.js',
         'routes/*/*.js',
         'public/asset/js/*.js',
-        'public/asset/styl/*.styl'
+        'public/asset/less/*.less'
       ],
       tasks: [ 'jshint', 'less', 'express:dev' ],
       express: {
