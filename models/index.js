@@ -8,7 +8,9 @@ var fs = require( 'fs' );
 var path = require( 'path' );
 var lodash = require( 'lodash' );
 var Sequelize = require( 'sequelize' );
-var sequelize = new Sequelize( env.get( 'DB_CONNECTION_URI' ) );
+var sequelize = new Sequelize( env.get( 'DB_CONNECTION_URI' ), {
+  logging: env.get( 'debug' ) ? console.log : false
+} );
 var db = {};
 
 // load all definitions
