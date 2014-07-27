@@ -103,6 +103,7 @@ else {
 app.all([
   '/api/*',
   '/user*',
+  '!/user/new',
   '/topic*',
   '/task*'
 ], routes.auth.enforce, routes.auth.newUser );
