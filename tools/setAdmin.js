@@ -39,7 +39,6 @@ console.log( banner );
           isAdmin: true
         }).success( function( user ) {
           console.log( '%s was set as admin.\n', user.email );
-          rl.close();
 
           return getEmail();
         });
