@@ -1,7 +1,12 @@
 'use strict';
 
+// laod env
+var Habitat = require( 'habitat' );
+var env = new Habitat();
+Habitat.load();
+
 // load db models
-var db = require( '../models' );
+var db = require( '../models' )( env );
 
 // command prompt aid
 var readline = require( 'readline' );
