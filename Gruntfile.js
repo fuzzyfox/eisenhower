@@ -53,17 +53,24 @@ module.exports = function( grunt ) {
           node_env: 'development',
           port: 4321
         }
+      },
+      test: {
+        options: {
+          script: './server.js',
+          node_env: 'testing',
+          port: 4321
+        }
       }
     },
 
     // compile styles
     less: {
-      development: {
+      dev: {
         files: {
           'public/asset/css/eisenhower.css': 'public/asset/less/eisenhower.less'
         }
       },
-      production: {
+      prod: {
         options: {
           cleancss: true,
           sourceMap: true
@@ -85,6 +92,16 @@ module.exports = function( grunt ) {
       }
     },
 
+    // run mocha tests
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'list'
+        },
+        src: [ 'test/**/*.js' ]
+      }
+    },
+
     // run tasks on file changes
     watch: {
       files: [
@@ -95,7 +112,7 @@ module.exports = function( grunt ) {
         'public/asset/js/*.js',
         'public/asset/less/*.less'
       ],
-      tasks: [ 'jshint', 'less', 'express:dev' ],
+      tasks: [ 'jshint', 'less:dev', 'express:dev' ],
       express: {
         files: [ '*.js', 'models/**/*.js', 'routes/**/*.js' ],
         tasks:  [ 'express:dev' ],
@@ -123,10 +140,11 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-less' );
   grunt.loadNpmTasks( 'grunt-express-server' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
+  grunt.loadNpmTasks( 'grunt-mocha-test' );
   grunt.loadNpmTasks('grunt-banner');
   grunt.loadNpmTasks('grunt-bump');
 
-  grunt.registerTask( 'default', [ 'jshint', 'less:development', 'express:dev', 'watch' ] );
-  grunt.registerTask( 'build', [ 'less:production', 'usebanner' ] );
-  grunt.registerTask( 'test', [ 'jshint' ] );
+  grunt.registerTask( 'default', [ 'jshint', 'less:dev', 'express:dev', 'watch' ] );
+  grunt.registerTask( 'build', [ 'less:prod', 'usebanner' ] );
+  grunt.registerTask( 'test', [ 'jshint', 'less:prod', 'express:test', 'mochaTest:test' ] );
 };

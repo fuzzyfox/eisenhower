@@ -1,21 +1,23 @@
 'use strict';
 
-var db = require( '../../models' );
+module.exports = function( env ) {
+  var db = require( '../../models' )( env );
 
-module.exports = function( req, res, next ) {
-  db.User.find( { where: { email: req.session.email.toLowerCase() } } ).success( function( user ) {
-    if( user ) {
-      user.lastLogin = ( new Date() ).toISOString();
-      user.save(); // fire + forget
+  return function( req, res, next ) {
+    db.User.find( { where: { email: req.session.email.toLowerCase() } } ).success( function( user ) {
+      if( user ) {
+        user.lastLogin = ( new Date() ).toISOString();
+        return user.save().success( function() {
+          req.session.user = user.dataValues;
+          next();
+        });
+      }
 
-      req.session.user = user.dataValues;
-      return next();
-    }
+      if( req.url !== '/user/new' && req.url !== '/api/user/new' ) {
+        res.redirect( '/user/new' );
+      }
 
-    if( req.url !== '/user/new' && req.url !== '/api/user/new' ) {
-      res.redirect( '/user/new' );
-    }
-
-    next();
-  });
+      next();
+    });
+  };
 };
