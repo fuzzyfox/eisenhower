@@ -11,12 +11,19 @@ var nunjucks = require( 'nunjucks' );
 var marked = require( 'marked' );
 var moment = require( 'moment' );
 var helmet = require( 'helmet' );
-var routes = require( './routes' );
-var db = require( './models' );
 
 // setup environment
 var env = new Habitat();
-Habitat.load();
+if( process.env.NODE_ENV !== 'testing' ) {
+  Habitat.load();
+}
+else {
+  Habitat.load( __dirname + '/.env-test' );
+}
+
+// load routes + models
+var routes = require( './routes' )( env );
+var db = require( './models' )( env );
 
 // setup server
 var app = express();
@@ -85,7 +92,9 @@ app.get( '/paper-test', function( req, res ) {
 });
 
 // auth barrier
-if( env.get( 'persona_audience' ) ) {
+if( env.get( 'node_env' ) !== 'testing' && env.get( 'persona_audience' ) ) {
+  console.log( 'loading persona for audience: %s', env.get( 'persona_audience' ) );
+
 	// setup persona
 	require( 'express-persona' )( app, {
 		audience: env.get( 'persona_audience' )
@@ -94,8 +103,16 @@ if( env.get( 'persona_audience' ) ) {
 	// allow login before we launch
 	app.get( '/login', routes.auth.login );
 }
+else if( env.get( 'node_env' ) === 'testing' && env.get( 'test_user' ) ) {
+  console.log( 'loading test user (%s) from environment', env.get( 'test_user' ) );
+
+  app.use( function( req, res, next ) {
+    req.session.email = env.get( 'test_user' );
+    next();
+  });
+}
 else {
-  console.error( 'failed to launch... can\'t no auth method' );
+  console.error( 'failed to launch... no auth method set' );
   process.exit( 1 );
 }
 
@@ -169,14 +186,10 @@ app.get( '/user/update/:id', routes.user.update );
 app.get( '/user/delete/:id', routes.user.remove );
 
 // api routes for users
-app.get( '/api/user/:id?', function( req, res ) {
-  if( !req.params.id ) {
-    req.params.id = req.session.user.id;
-  }
-
-  routes.api.user.details( req, res );
-});
+app.get( '/api/user/:id?', routes.api.user.details );
 app.post( '/api/user/new', routes.api.user.create );
+app.post( '/api/user/update/:id', routes.api.user.update );
+app.post( '/api/user/delete/:id', routes.api.user.remove );
 
 /*
   Ajax add flash messages
@@ -215,3 +228,6 @@ db.sequelize.sync({ force: env.get( 'DB_FORCE_SYNC' ) }).complete( function( err
     console.log( 'Now listening on %d', server.address().port );
   });
 });
+
+// export for testing
+module.exports = app;
